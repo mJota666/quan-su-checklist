@@ -21,7 +21,7 @@
     .track{height:4px;background:var(--line);margin-top:14px;overflow:hidden}.fill{height:100%;background:var(--accent);width:0;transition:.25s}
     .search{display:flex;border-bottom:1px solid var(--line);margin-bottom:14px}
     .search input{width:100%;border:0;background:transparent;padding:12px 2px;outline:none}
-    .filters{display:flex;gap:8px;overflow:auto;scrollbar-width:none;margin-bottom:22px}.filters::-webkit-scrollbar{display:none}
+    .filters{display:flex;gap:8px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;margin:0 -18px 22px;padding:0 18px 4px;-webkit-overflow-scrolling:touch;touch-action:pan-x;overscroll-behavior-x:contain}.filters::-webkit-scrollbar{display:none}
     .chip{border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:999px;padding:8px 12px;white-space:nowrap;font-size:13px}
     .chip.active{background:var(--accent);border-color:var(--accent);color:#fff}
     .list{display:grid}
@@ -73,10 +73,11 @@
     ["Thẻ sinh viên","Giấy tờ"],
     ["Tiền mặt vừa đủ","Giấy tờ"],
 
+    ["Áo mặc buổi tối","Quần áo"],
+    ["Quần mặc buổi tối","Quần áo"],
+    ["Đồ ngủ","Quần áo"],
     ["Vớ / tất 6–8 đôi","Quần áo"],
     ["Dép đi tắm","Quần áo"],
-    ["Đồ ngủ","Quần áo"],
-    ["Đồ mặc buổi tối","Quần áo"],
 
     ["Khăn mặt","Vệ sinh"],
     ["Khăn tắm","Vệ sinh"],
@@ -86,9 +87,9 @@
     ["Dầu gội","Vệ sinh"],
     ["Xà bông rửa tay","Vệ sinh"],
     ["Nước giặt / nước xả vải","Vệ sinh"],
-    ["Kem chống nắng","Vệ sinh"],
 
     ["Softfel xịt muỗi","Sức khỏe"],
+    ["Kem chống nắng","Sức khỏe"],
     ["Băng keo cá nhân","Sức khỏe"],
     ["Thuốc cá nhân đang dùng","Sức khỏe"],
     ["Dầu gió","Sức khỏe"],
@@ -110,16 +111,28 @@
     ["Khăn giấy khô","Tiện ích"],
     ["Khăn ướt","Tiện ích"],
     ["Áo mưa mỏng","Tiện ích"],
+    ["Dù gấp gọn","Tiện ích"],
 
     ["Bánh / đồ ăn nhẹ","Đồ ăn"]
   ];
 
-  const KEY="qs_checklist_minimal_v2";
+  const KEY="qs_checklist_minimal_v3";
+  const OLD_KEY="qs_checklist_minimal_v2";
   const $=s=>document.querySelector(s);
   let active=CATEGORIES[0];
   const uid=()=>crypto.randomUUID?.() || Date.now()+"-"+Math.random();
   const defaults=()=>DEFAULT.map(x=>({id:uid(),title:x[0],category:x[1],checked:false}));
-  const load=()=>{try{return JSON.parse(localStorage.getItem(KEY)) || defaults()}catch{return defaults()}};
+  const load=()=>{
+    try {
+      const saved=JSON.parse(localStorage.getItem(KEY) || localStorage.getItem(OLD_KEY) || "null");
+      if(!saved) return defaults();
+      const byTitle=new Map(saved.map(x=>[x.title,x]));
+      return DEFAULT.map(x=>{
+        const old=byTitle.get(x[0]);
+        return {id:old?.id || uid(),title:x[0],category:x[1],checked:old?.checked || false};
+      }).concat(saved.filter(x=>!DEFAULT.some(d=>d[0]===x.title)));
+    } catch { return defaults(); }
+  };
   const save=x=>localStorage.setItem(KEY,JSON.stringify(x));
   let items=load(); save(items);
 
