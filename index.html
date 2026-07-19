@@ -6,143 +6,58 @@
   <meta name="theme-color" content="#fff6cf" />
   <title>Checklist quân sự</title>
   <style>
-    :root{
-      --bg:#fff6cf;--panel:#fffdf2;--text:#252032;--muted:#726a7c;--line:#252032;
-      --yellow:#ffd84d;--pink:#ff8fb1;--blue:#73c8ff;--green:#7bd88f;--purple:#b99cff;
-      --shadow:4px 4px 0 var(--line)
-    }
+    :root{--bg:#fff6cf;--panel:#fffdf2;--text:#252032;--muted:#726a7c;--line:#252032;--yellow:#ffd84d;--pink:#ff8fb1;--blue:#73c8ff;--green:#7bd88f;--purple:#b99cff;--shadow:4px 4px 0 var(--line)}
     *{box-sizing:border-box}
-    html,body{margin:0;min-height:100%;background:
-      linear-gradient(90deg,rgba(37,32,50,.035) 1px,transparent 1px),
-      linear-gradient(rgba(37,32,50,.035) 1px,transparent 1px),var(--bg);
-      background-size:16px 16px;color:var(--text);font-family:"Courier New",ui-monospace,monospace}
-    button,input,select{font:inherit}button{cursor:pointer}
+    html,body{margin:0;min-height:100%;background:linear-gradient(90deg,rgba(37,32,50,.035) 1px,transparent 1px),linear-gradient(rgba(37,32,50,.035) 1px,transparent 1px),var(--bg);background-size:16px 16px;color:var(--text);font-family:"Courier New",ui-monospace,monospace}
+    button,input,select,textarea{font:inherit}button{cursor:pointer}
     .app{width:min(100%,480px);min-height:100svh;margin:auto;padding:calc(24px + env(safe-area-inset-top)) 16px calc(102px + env(safe-area-inset-bottom))}
     header{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:22px}
     h1{font-size:30px;line-height:1.03;margin:0;text-transform:uppercase;letter-spacing:-1px;text-shadow:3px 3px 0 var(--yellow)}
     header p{color:var(--muted);font-size:12px;margin:9px 0 0;font-weight:700}
-    .reset{border:2px solid var(--line);background:var(--pink);padding:9px 10px;color:var(--text);font-size:12px;font-weight:800;box-shadow:3px 3px 0 var(--line);border-radius:0}
+    .reset{border:2px solid var(--line);background:var(--pink);padding:9px 10px;color:var(--text);font-size:12px;font-weight:800;box-shadow:3px 3px 0 var(--line)}
     .reset:active,.add:active,.chip:active,.primary:active,.secondary:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--line)}
     .summary{border:2px solid var(--line);background:var(--panel);padding:16px;margin-bottom:18px;box-shadow:var(--shadow)}
-    .summary-top{display:flex;justify-content:space-between;align-items:end}
-    .summary strong{font-size:26px;background:var(--yellow);padding:2px 7px;border:2px solid var(--line)}
-    .summary span{font-size:12px;color:var(--muted);font-weight:700}
-    .track{height:14px;background:#fff;border:2px solid var(--line);margin-top:14px;overflow:hidden}
-    .fill{height:100%;background:repeating-linear-gradient(90deg,var(--green) 0 10px,#5bcf79 10px 14px);width:0;transition:.25s steps(6)}
-    .search{display:flex;border:2px solid var(--line);background:#fff;padding:0 10px;margin-bottom:14px;box-shadow:3px 3px 0 var(--blue)}
-    .search:before{content:">";align-self:center;font-weight:900}
-    .search input{width:100%;border:0;background:transparent;padding:12px 8px;outline:none;color:var(--text);font-size:13px;font-weight:700}
-    .filters{display:flex;gap:8px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;margin:0 -16px 20px;padding:3px 16px 7px;-webkit-overflow-scrolling:touch;touch-action:pan-x;overscroll-behavior-x:contain}
-    .filters::-webkit-scrollbar{display:none}
-    .chip{flex:0 0 auto;border:2px solid var(--line);background:var(--panel);color:var(--text);padding:8px 11px;white-space:nowrap;font-size:12px;font-weight:800;box-shadow:3px 3px 0 var(--line);border-radius:0}
-    .chip:nth-child(2n){background:#eaf7ff}.chip:nth-child(3n){background:#fff0f5}.chip:nth-child(4n){background:#effbea}
-    .chip.active{background:var(--purple);color:var(--text);transform:translate(2px,2px);box-shadow:1px 1px 0 var(--line)}
-    .list{display:grid;gap:10px}
-    .item{display:grid;grid-template-columns:28px 1fr auto;align-items:center;gap:11px;padding:12px;border:2px solid var(--line);background:var(--panel);box-shadow:3px 3px 0 var(--line)}
-    .item:nth-child(4n+1){box-shadow:3px 3px 0 var(--blue)}
-    .item:nth-child(4n+2){box-shadow:3px 3px 0 var(--pink)}
-    .item:nth-child(4n+3){box-shadow:3px 3px 0 var(--green)}
-    .item:nth-child(4n){box-shadow:3px 3px 0 var(--purple)}
-    .item.checked{opacity:.58;background:#eceadf}.item.checked .title{text-decoration:line-through}
-    .check{appearance:none;width:22px;height:22px;border:2px solid var(--line);background:#fff;display:grid;place-content:center;border-radius:0}
-    .check:checked{background:var(--green)}.check:checked:after{content:"✓";font-size:16px;color:var(--text);font-weight:900}
-    .title{font-size:13px;font-weight:900;line-height:1.4}.meta{font-size:10px;color:var(--muted);margin-top:4px;text-transform:uppercase;font-weight:700}
-    .delete{border:0;background:transparent;color:var(--text);font-size:20px;padding:3px;font-weight:900}
-    .empty{text-align:center;color:var(--muted);padding:34px 0;font-weight:700}
-    .add{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom));width:min(calc(100% - 32px),448px);border:2px solid var(--line);background:var(--yellow);color:var(--text);padding:14px;font-weight:900;box-shadow:5px 5px 0 var(--line);border-radius:0;text-transform:uppercase}
-    dialog{width:min(calc(100% - 32px),420px);border:2px solid var(--line);border-radius:0;padding:18px;background:var(--panel);box-shadow:7px 7px 0 var(--line)}
-    dialog::backdrop{background:rgba(37,32,50,.48)}dialog h2{font-size:20px;margin:0 0 18px;text-transform:uppercase;text-shadow:2px 2px 0 var(--yellow)}
-    label{display:block;font-size:11px;color:var(--muted);margin-bottom:7px;font-weight:800;text-transform:uppercase}.field{margin-bottom:14px}
-    .field input,.field select{width:100%;border:2px solid var(--line);background:#fff;border-radius:0;padding:12px;outline:none;color:var(--text)}
-    .actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
-    .secondary,.primary{border:2px solid var(--line);border-radius:0;padding:11px;font-weight:900;box-shadow:3px 3px 0 var(--line)}
-    .secondary{background:#eee9df}.primary{background:var(--green);color:var(--text)}
+    .summary-top{display:flex;justify-content:space-between;align-items:end}.summary strong{font-size:26px;background:var(--yellow);padding:2px 7px;border:2px solid var(--line)}.summary span{font-size:12px;color:var(--muted);font-weight:700}
+    .track{height:14px;background:#fff;border:2px solid var(--line);margin-top:14px;overflow:hidden}.fill{height:100%;background:repeating-linear-gradient(90deg,var(--green) 0 10px,#5bcf79 10px 14px);width:0;transition:.25s steps(6)}
+    .search{display:flex;border:2px solid var(--line);background:#fff;padding:0 10px;margin-bottom:14px;box-shadow:3px 3px 0 var(--blue)}.search:before{content:">";align-self:center;font-weight:900}.search input{width:100%;border:0;background:transparent;padding:12px 8px;outline:none;color:var(--text);font-size:13px;font-weight:700}
+    .filters{display:flex;gap:8px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;margin:0 -16px 20px;padding:3px 16px 7px;-webkit-overflow-scrolling:touch;touch-action:pan-x;overscroll-behavior-x:contain}.filters::-webkit-scrollbar{display:none}
+    .chip{flex:0 0 auto;border:2px solid var(--line);background:var(--panel);color:var(--text);padding:8px 11px;white-space:nowrap;font-size:12px;font-weight:800;box-shadow:3px 3px 0 var(--line)}.chip:nth-child(2n){background:#eaf7ff}.chip:nth-child(3n){background:#fff0f5}.chip:nth-child(4n){background:#effbea}.chip.active{background:var(--purple);transform:translate(2px,2px);box-shadow:1px 1px 0 var(--line)}
+    .list{display:grid;gap:10px}.item{display:grid;grid-template-columns:28px 1fr auto;align-items:start;gap:11px;padding:12px;border:2px solid var(--line);background:var(--panel);box-shadow:3px 3px 0 var(--line)}.item:nth-child(4n+1){box-shadow:3px 3px 0 var(--blue)}.item:nth-child(4n+2){box-shadow:3px 3px 0 var(--pink)}.item:nth-child(4n+3){box-shadow:3px 3px 0 var(--green)}.item:nth-child(4n){box-shadow:3px 3px 0 var(--purple)}
+    .item.checked{opacity:.58;background:#eceadf}.item.checked .title{text-decoration:line-through}.check{appearance:none;width:22px;height:22px;border:2px solid var(--line);background:#fff;display:grid;place-content:center;margin-top:1px}.check:checked{background:var(--green)}.check:checked:after{content:"✓";font-size:16px;color:var(--text);font-weight:900}
+    .title{font-size:13px;font-weight:900;line-height:1.4}.details{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}.badge{display:inline-block;border:1px solid var(--line);padding:2px 5px;font-size:9px;font-weight:900;background:var(--yellow);text-transform:uppercase}.category{background:var(--blue)}.note{font-size:10px;color:var(--muted);margin-top:7px;line-height:1.45;font-weight:700}.delete{border:0;background:transparent;color:var(--text);font-size:20px;padding:3px;font-weight:900}.empty{text-align:center;color:var(--muted);padding:34px 0;font-weight:700}
+    .add{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom));width:min(calc(100% - 32px),448px);border:2px solid var(--line);background:var(--yellow);color:var(--text);padding:14px;font-weight:900;box-shadow:5px 5px 0 var(--line);text-transform:uppercase}
+    dialog{width:min(calc(100% - 32px),420px);border:2px solid var(--line);padding:18px;background:var(--panel);box-shadow:7px 7px 0 var(--line)}dialog::backdrop{background:rgba(37,32,50,.48)}dialog h2{font-size:20px;margin:0 0 18px;text-transform:uppercase;text-shadow:2px 2px 0 var(--yellow)}
+    label{display:block;font-size:11px;color:var(--muted);margin-bottom:7px;font-weight:800;text-transform:uppercase}.field{margin-bottom:14px}.field input,.field select,.field textarea{width:100%;border:2px solid var(--line);background:#fff;padding:12px;outline:none;color:var(--text)}.field textarea{min-height:74px;resize:vertical}.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}.secondary,.primary{border:2px solid var(--line);padding:11px;font-weight:900;box-shadow:3px 3px 0 var(--line)}.secondary{background:#eee9df}.primary{background:var(--green);color:var(--text)}
     @media(min-width:700px){body{padding:24px 0}.app{border:2px solid var(--line);background:rgba(255,246,207,.94);box-shadow:8px 8px 0 var(--line);min-height:calc(100svh - 48px)}}
   </style>
 </head>
 <body>
 <main class="app">
-  <header>
-    <div><h1>Checklist<br>quân sự</h1><p>Đánh dấu những món đã chuẩn bị.</p></div>
-    <button class="reset" id="resetBtn">Làm mới</button>
-  </header>
-  <section class="summary">
-    <div class="summary-top"><strong id="percent">0%</strong><span id="count">0/0 món</span></div>
-    <div class="track"><div class="fill" id="fill"></div></div>
-  </section>
-  <label class="search"><input id="search" placeholder="Tìm món đồ..." /></label>
-  <div class="filters" id="filters"></div>
-  <section class="list" id="list"></section>
-  <button class="add" id="addBtn">+ Thêm món</button>
+  <header><div><h1>Checklist<br>quân sự</h1><p>Đánh dấu những món đã chuẩn bị.</p></div><button class="reset" id="resetBtn">Làm mới</button></header>
+  <section class="summary"><div class="summary-top"><strong id="percent">0%</strong><span id="count">0/0 món</span></div><div class="track"><div class="fill" id="fill"></div></div></section>
+  <label class="search"><input id="search" placeholder="Tìm món đồ hoặc ghi chú..." /></label>
+  <div class="filters" id="filters"></div><section class="list" id="list"></section><button class="add" id="addBtn">+ Thêm món</button>
 </main>
-
-<dialog id="dialog">
-  <form id="form">
-    <h2>Thêm món mới</h2>
-    <div class="field"><label for="name">Tên món</label><input id="name" required maxlength="80" placeholder="Ví dụ: Áo mưa mỏng" /></div>
-    <div class="field"><label for="category">Nhóm</label><select id="category"></select></div>
-    <div class="actions"><button type="button" class="secondary" id="cancel">Hủy</button><button class="primary">Thêm</button></div>
-  </form>
-</dialog>
-
+<dialog id="dialog"><form id="form"><h2>Thêm món mới</h2><div class="field"><label for="name">Tên món</label><input id="name" required maxlength="80" /></div><div class="field"><label for="quantity">Số lượng</label><input id="quantity" maxlength="30" placeholder="Ví dụ: 2 cái" /></div><div class="field"><label for="note">Ghi chú</label><textarea id="note" maxlength="180" placeholder="Ví dụ: Không được mặc quần đùi"></textarea></div><div class="field"><label for="category">Nhóm</label><select id="category"></select></div><div class="actions"><button type="button" class="secondary" id="cancel">Hủy</button><button class="primary">Thêm</button></div></form></dialog>
 <script>
 (() => {
   const CATEGORIES=["Giấy tờ","Quần áo","Vệ sinh","Sức khỏe","Điện tử","Tiện ích","Đồ ăn"];
   const DEFAULT=[
-    ["Thẻ sinh viên","Giấy tờ"],["Tiền mặt vừa đủ","Giấy tờ"],
-    ["Áo mặc buổi tối","Quần áo"],["Quần dài mặc ngoài giờ","Quần áo"],["Đồ ngủ kín đáo","Quần áo"],["Áo khoác mỏng","Quần áo"],["Vớ / tất 6–8 đôi","Quần áo"],["Giày Asia","Quần áo"],["Dép lào / dép đi tắm","Quần áo"],["Thắt lưng dự phòng","Quần áo"],["Găng tay chống nắng","Quần áo"],["Ống tay chống nắng","Quần áo"],["Khẩu trang","Quần áo"],["Dây cột tóc","Quần áo"],
-    ["Khăn mặt","Vệ sinh"],["Khăn tắm","Vệ sinh"],["Bàn chải đánh răng","Vệ sinh"],["Kem đánh răng","Vệ sinh"],["Cốc đánh răng","Vệ sinh"],["Sữa tắm","Vệ sinh"],["Dầu gội","Vệ sinh"],["Sữa rửa mặt","Vệ sinh"],["Xà bông rửa tay","Vệ sinh"],["Nước giặt","Vệ sinh"],["Nước xả vải","Vệ sinh"],["Nước tẩy trang","Vệ sinh"],["Bông tẩy trang","Vệ sinh"],["Phấn phủ","Vệ sinh"],["Lược","Vệ sinh"],["Gương nhỏ","Vệ sinh"],["Tăm chỉ nha khoa","Vệ sinh"],["Bấm móng tay","Vệ sinh"],["Chai xịt giày","Vệ sinh"],["Xịt khử mùi chân","Vệ sinh"],
-    ["Softfel xịt muỗi","Sức khỏe"],["Kem chống nắng cho mặt","Sức khỏe"],["Kem chống nắng body","Sức khỏe"],["Băng keo cá nhân","Sức khỏe"],["Salonpas","Sức khỏe"],["Thuốc cá nhân đang dùng","Sức khỏe"],["Dầu gió","Sức khỏe"],["Thuốc giảm đau / hạ sốt","Sức khỏe"],["Thuốc đau bụng","Sức khỏe"],
-    ["Điện thoại","Điện tử"],["Dây sạc điện thoại","Điện tử"],["Củ sạc","Điện tử"],["Sạc dự phòng","Điện tử"],["Quạt cầm tay","Điện tử"],["Máy sấy tóc","Điện tử"],["Tai nghe","Điện tử"],["Đăng ký gói 4G","Điện tử"],
-    ["Bình nước 1–1.5L","Tiện ích"],["Đầu lọc nước","Tiện ích"],["Móc treo quần áo (5–10 cái)","Tiện ích"],["Dây phơi đồ","Tiện ích"],["Kẹp quần áo","Tiện ích"],["Ổ khóa nhỏ","Tiện ích"],["Túi đựng đồ bẩn","Tiện ích"],["Khăn giấy khô","Tiện ích"],["Khăn ướt","Tiện ích"],["Áo mưa mỏng","Tiện ích"],["Dù che nắng mưa","Tiện ích"],["Bút viết","Tiện ích"],["Sổ tay","Tiện ích"],["Kim chỉ","Tiện ích"],["Chăn mỏng","Tiện ích"],["Gối mỏng","Tiện ích"],
-    ["Bánh / đồ ăn nhẹ","Đồ ăn"]
+    ["Thẻ sinh viên","Giấy tờ","1 thẻ","Luôn mang theo người"],["Tiền mặt vừa đủ","Giấy tờ","300–500k","Chia nhỏ tiền, không mang quá nhiều"],
+    ["Áo mặc buổi tối","Quần áo","2–3 áo","Chọn loại mỏng, dễ giặt và nhanh khô"],["Quần dài mặc ngoài giờ","Quần áo","2–3 quần","Không được mặc quần đùi"],["Đồ ngủ kín đáo","Quần áo","1–2 bộ","Ưu tiên đồ dài, lịch sự"],["Áo khoác mỏng","Quần áo","1 cái","Dùng buổi tối hoặc phòng lạnh"],["Vớ / tất","Quần áo","6–8 đôi","Mang dư vì vận động nhiều"],["Giày Asia","Quần áo","1 đôi","Đi học và hoạt động ngoài trời"],["Dép lào / dép đi tắm","Quần áo","1 đôi","Chọn loại chống trượt"],["Thắt lưng dự phòng","Quần áo","1 cái","Phòng trường hợp quần quân phục rộng"],["Găng tay chống nắng","Quần áo","1 đôi","Dùng khi học ngoài trời"],["Ống tay chống nắng","Quần áo","1 đôi","Che nắng phần cánh tay"],["Khẩu trang","Quần áo","10–20 cái","Mang dư để thay hằng ngày"],["Dây cột tóc","Quần áo","5–10 cái","Mang dư vì dễ thất lạc"],
+    ["Khăn mặt","Vệ sinh","2 cái","Tách riêng khăn mặt và khăn lau"],["Khăn tắm","Vệ sinh","1–2 cái","Chọn loại nhanh khô"],["Bàn chải đánh răng","Vệ sinh","1 cái",""],["Kem đánh răng","Vệ sinh","1 tuýp nhỏ",""],["Cốc đánh răng","Vệ sinh","1 cái","Cốc nhựa nhẹ"],["Sữa tắm","Vệ sinh","1 chai nhỏ","Chiết sang chai du lịch"],["Dầu gội","Vệ sinh","1 chai nhỏ","Chiết sang chai du lịch"],["Sữa rửa mặt","Vệ sinh","1 tuýp",""],["Xà bông rửa tay","Vệ sinh","1 chai / bánh",""],["Nước giặt","Vệ sinh","1 chai nhỏ","Đủ dùng cho thời gian nội trú"],["Nước xả vải","Vệ sinh","1 chai nhỏ","Không nhầm với Softfel xịt muỗi"],["Nước tẩy trang","Vệ sinh","1 chai",""],["Bông tẩy trang","Vệ sinh","1 gói",""],["Phấn phủ","Vệ sinh","1 hộp","Tùy nhu cầu"],["Lược","Vệ sinh","1 cái",""],["Gương nhỏ","Vệ sinh","1 cái","Ưu tiên gương nhựa khó vỡ"],["Tăm chỉ nha khoa","Vệ sinh","1 hộp",""],["Bấm móng tay","Vệ sinh","1 cái",""],["Chai xịt giày","Vệ sinh","1 chai","Dùng sau khi giày ẩm hoặc có mùi"],["Xịt khử mùi chân","Vệ sinh","1 chai",""],
+    ["Softfel xịt muỗi","Sức khỏe","1 chai","Thuốc xịt chống muỗi"],["Kem chống nắng cho mặt","Sức khỏe","1 tuýp","Bôi lại khi hoạt động ngoài trời"],["Kem chống nắng body","Sức khỏe","1 chai / tuýp","Dùng cho cổ, tay và chân"],["Băng keo cá nhân","Sức khỏe","1 hộp nhỏ","Dùng khi trầy xước hoặc phồng chân"],["Salonpas","Sức khỏe","1 gói","Dùng khi đau mỏi cơ"],["Thuốc cá nhân đang dùng","Sức khỏe","Đủ liệu trình","Mang theo hướng dẫn sử dụng nếu cần"],["Dầu gió","Sức khỏe","1 chai nhỏ",""],["Thuốc giảm đau / hạ sốt","Sức khỏe","1 vỉ","Chỉ dùng đúng hướng dẫn"],["Thuốc đau bụng","Sức khỏe","1 vỉ","Chỉ dùng đúng hướng dẫn"],
+    ["Điện thoại","Điện tử","1 máy",""],["Dây sạc điện thoại","Điện tử","1–2 dây","Nên có một dây dự phòng"],["Củ sạc","Điện tử","1 cái",""],["Sạc dự phòng","Điện tử","1 cái","Sạc đầy trước khi đi"],["Quạt cầm tay","Điện tử","1 cái","Ưu tiên loại pin lâu"],["Máy sấy tóc","Điện tử","1 cái","Kiểm tra trung tâm có cho dùng không"],["Tai nghe","Điện tử","1 cái",""],["Đăng ký gói 4G","Điện tử","1 gói","Đăng ký trước ngày đi"],
+    ["Bình nước","Tiện ích","1 bình 1–1.5L","Ghi tên để tránh thất lạc"],["Đầu lọc nước","Tiện ích","1 cái","Dùng khi nguồn nước có mùi hoặc cặn"],["Móc treo quần áo","Tiện ích","5–10 cái","Nhớ đánh dấu hoặc ghi tên lên móc"],["Dây phơi đồ","Tiện ích","1 dây 3–5m",""],["Kẹp quần áo","Tiện ích","10–15 cái","Mang dư vì dễ mất"],["Ổ khóa nhỏ","Tiện ích","1–2 cái","Dùng khóa tủ hoặc vali"],["Túi đựng đồ bẩn","Tiện ích","3–5 túi","Tách đồ sạch và đồ bẩn"],["Khăn giấy khô","Tiện ích","2–3 gói",""],["Khăn ướt","Tiện ích","2–3 gói",""],["Áo mưa mỏng","Tiện ích","1 cái","Loại gấp gọn"],["Dù che nắng mưa","Tiện ích","1 cái","Dùng được cả nắng lẫn mưa"],["Bút viết","Tiện ích","2–3 cây","Mang ít nhất một cây dự phòng"],["Sổ tay","Tiện ích","1 cuốn","Ghi lịch học và nội quy"],["Kim chỉ","Tiện ích","1 bộ nhỏ","Vá nút hoặc sửa đồ nhanh"],["Chăn mỏng","Tiện ích","1 cái","Kiểm tra nơi học có cấp chăn không"],["Gối mỏng","Tiện ích","1 cái","Loại nhỏ, dễ xếp"],
+    ["Bánh / đồ ăn nhẹ","Đồ ăn","3–5 phần","Mang vừa đủ, tránh đồ dễ hỏng"]
   ];
-  const KEY="qs_checklist_minimal_v4";
-  const OLD_KEYS=["qs_checklist_minimal_v3","qs_checklist_minimal_v2"];
-  const $=s=>document.querySelector(s);
-  let active=CATEGORIES[0];
-  const uid=()=>crypto.randomUUID?.() || Date.now()+"-"+Math.random();
-  const defaults=()=>DEFAULT.map(x=>({id:uid(),title:x[0],category:x[1],checked:false}));
-  const load=()=>{
-    try{
-      let raw=localStorage.getItem(KEY);
-      if(!raw){for(const key of OLD_KEYS){raw=localStorage.getItem(key);if(raw)break;}}
-      const saved=JSON.parse(raw||"null");
-      if(!saved)return defaults();
-      const byTitle=new Map(saved.map(x=>[x.title,x]));
-      return DEFAULT.map(x=>{const old=byTitle.get(x[0]);return{id:old?.id||uid(),title:x[0],category:x[1],checked:old?.checked||false};}).concat(saved.filter(x=>!DEFAULT.some(d=>d[0]===x.title)));
-    }catch{return defaults();}
-  };
-  const save=x=>localStorage.setItem(KEY,JSON.stringify(x));
-  let items=load();save(items);
-  function esc(s){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
-  function renderFilters(){
-    $("#filters").innerHTML="";
-    CATEGORIES.forEach(c=>{const b=document.createElement("button");b.className="chip"+(c===active?" active":"");b.textContent=c;b.onclick=()=>{active=c;renderFilters();render()};$("#filters").appendChild(b);});
-    $("#category").innerHTML=CATEGORIES.map(c=>`<option>${c}</option>`).join("");
-  }
-  function render(){
-    const q=$("#search").value.trim().toLowerCase();
-    const visible=items.filter(x=>x.category===active&&x.title.toLowerCase().includes(q));
-    const done=items.filter(x=>x.checked).length;
-    const pct=items.length?Math.round(done/items.length*100):0;
-    $("#percent").textContent=pct+"%";$("#count").textContent=`${done}/${items.length} món`;$("#fill").style.width=pct+"%";
-    const list=$("#list");list.innerHTML="";
-    if(!visible.length){list.innerHTML='<div class="empty">Không có món phù hợp.</div>';return}
-    visible.forEach(item=>{
-      const row=document.createElement("article");row.className="item"+(item.checked?" checked":"");
-      row.innerHTML=`<input class="check" type="checkbox" ${item.checked?"checked":""}><div><div class="title">${esc(item.title)}</div><div class="meta">${esc(item.category)}</div></div><button class="delete" aria-label="Xóa">×</button>`;
-      row.querySelector(".check").onchange=e=>{const found=items.find(x=>x.id===item.id);if(found)found.checked=e.target.checked;save(items);render()};
-      row.querySelector(".delete").onclick=()=>{if(confirm(`Xóa “${item.title}”?`)){items=items.filter(x=>x.id!==item.id);save(items);render()}};
-      list.appendChild(row);
-    });
-  }
-  $("#search").oninput=render;
-  $("#addBtn").onclick=()=>{$("#form").reset();$("#category").value=active;$("#dialog").showModal();setTimeout(()=>$("#name").focus(),30)};
-  $("#cancel").onclick=()=>$("#dialog").close();
-  $("#form").onsubmit=e=>{e.preventDefault();const title=$("#name").value.trim();if(!title)return;items.push({id:uid(),title,category:$("#category").value,checked:false});save(items);$("#dialog").close();render()};
-  $("#resetBtn").onclick=()=>{if(confirm("Khôi phục danh sách mặc định?")){items=defaults();save(items);active=CATEGORIES[0];renderFilters();render()}};
-  renderFilters();render();
+  const KEY="qs_checklist_8bit_v5";const OLD_KEYS=["qs_checklist_minimal_v4","qs_checklist_minimal_v3","qs_checklist_minimal_v2"];const $=s=>document.querySelector(s);let active=CATEGORIES[0];const uid=()=>crypto.randomUUID?.()||Date.now()+"-"+Math.random();
+  const defaults=()=>DEFAULT.map(x=>({id:uid(),title:x[0],category:x[1],quantity:x[2],note:x[3],checked:false}));
+  const load=()=>{try{let raw=localStorage.getItem(KEY);if(!raw){for(const key of OLD_KEYS){raw=localStorage.getItem(key);if(raw)break;}}const saved=JSON.parse(raw||"null");if(!saved)return defaults();const byTitle=new Map(saved.map(x=>[x.title,x]));return DEFAULT.map(x=>{const old=byTitle.get(x[0]);return{id:old?.id||uid(),title:x[0],category:x[1],quantity:x[2],note:x[3],checked:old?.checked||false};}).concat(saved.filter(x=>!DEFAULT.some(d=>d[0]===x.title)).map(x=>({...x,quantity:x.quantity||"1",note:x.note||""})));}catch{return defaults();}};
+  const save=x=>localStorage.setItem(KEY,JSON.stringify(x));let items=load();save(items);const esc=s=>String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+  function renderFilters(){const wrap=$("#filters");wrap.innerHTML="";CATEGORIES.forEach(c=>{const b=document.createElement("button");b.className="chip"+(c===active?" active":"");b.textContent=c;b.onclick=()=>{active=c;renderFilters();render()};wrap.appendChild(b)});$("#category").innerHTML=CATEGORIES.map(c=>`<option>${c}</option>`).join("");}
+  function render(){const q=$("#search").value.trim().toLowerCase();const visible=items.filter(x=>x.category===active&&(x.title+" "+(x.note||"")+" "+(x.quantity||"")).toLowerCase().includes(q));const done=items.filter(x=>x.checked).length;const pct=items.length?Math.round(done/items.length*100):0;$("#percent").textContent=pct+"%";$("#count").textContent=`${done}/${items.length} món`;$("#fill").style.width=pct+"%";const list=$("#list");list.innerHTML="";if(!visible.length){list.innerHTML='<div class="empty">Không có món phù hợp.</div>';return}visible.forEach(item=>{const row=document.createElement("article");row.className="item"+(item.checked?" checked":"");row.innerHTML=`<input class="check" type="checkbox" ${item.checked?"checked":""}><div><div class="title">${esc(item.title)}</div><div class="details"><span class="badge">SL: ${esc(item.quantity||"1")}</span><span class="badge category">${esc(item.category)}</span></div>${item.note?`<div class="note">★ ${esc(item.note)}</div>`:""}</div><button class="delete" aria-label="Xóa">×</button>`;row.querySelector(".check").onchange=e=>{const found=items.find(x=>x.id===item.id);if(found)found.checked=e.target.checked;save(items);render()};row.querySelector(".delete").onclick=()=>{if(confirm(`Xóa “${item.title}”?`)){items=items.filter(x=>x.id!==item.id);save(items);render()}};list.appendChild(row)});}
+  $("#search").oninput=render;$("#addBtn").onclick=()=>{$("#form").reset();$("#category").value=active;$("#dialog").showModal();setTimeout(()=>$("#name").focus(),30)};$("#cancel").onclick=()=>$("#dialog").close();$("#form").onsubmit=e=>{e.preventDefault();const title=$("#name").value.trim();if(!title)return;items.push({id:uid(),title,category:$("#category").value,quantity:$("#quantity").value.trim()||"1",note:$("#note").value.trim(),checked:false});save(items);$("#dialog").close();render()};$("#resetBtn").onclick=()=>{if(confirm("Khôi phục danh sách mặc định?")){items=defaults();save(items);active=CATEGORIES[0];renderFilters();render()}};renderFilters();render();
 })();
 </script>
 </body>
