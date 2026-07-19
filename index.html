@@ -22,7 +22,7 @@
     .search{display:flex;border-bottom:1px solid var(--line);margin-bottom:14px}
     .search input{width:100%;border:0;background:transparent;padding:12px 2px;outline:none}
     .filters{display:flex;gap:8px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;margin:0 -18px 22px;padding:0 18px 4px;-webkit-overflow-scrolling:touch;touch-action:pan-x;overscroll-behavior-x:contain}.filters::-webkit-scrollbar{display:none}
-    .chip{border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:999px;padding:8px 12px;white-space:nowrap;font-size:13px}
+    .chip{flex:0 0 auto;border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:999px;padding:8px 12px;white-space:nowrap;font-size:13px}
     .chip.active{background:var(--accent);border-color:var(--accent);color:#fff}
     .list{display:grid}
     .item{display:grid;grid-template-columns:26px 1fr auto;align-items:center;gap:12px;padding:15px 0;border-bottom:1px solid var(--line)}
@@ -74,23 +74,44 @@
     ["Tiền mặt vừa đủ","Giấy tờ"],
 
     ["Áo mặc buổi tối","Quần áo"],
-    ["Quần mặc buổi tối","Quần áo"],
-    ["Đồ ngủ","Quần áo"],
+    ["Quần dài mặc ngoài giờ","Quần áo"],
+    ["Đồ ngủ kín đáo","Quần áo"],
+    ["Áo khoác mỏng","Quần áo"],
     ["Vớ / tất 6–8 đôi","Quần áo"],
-    ["Dép đi tắm","Quần áo"],
+    ["Giày Asia","Quần áo"],
+    ["Dép lào / dép đi tắm","Quần áo"],
+    ["Thắt lưng dự phòng","Quần áo"],
+    ["Găng tay chống nắng","Quần áo"],
+    ["Ống tay chống nắng","Quần áo"],
+    ["Khẩu trang","Quần áo"],
+    ["Dây cột tóc","Quần áo"],
 
     ["Khăn mặt","Vệ sinh"],
     ["Khăn tắm","Vệ sinh"],
     ["Bàn chải đánh răng","Vệ sinh"],
     ["Kem đánh răng","Vệ sinh"],
+    ["Cốc đánh răng","Vệ sinh"],
     ["Sữa tắm","Vệ sinh"],
     ["Dầu gội","Vệ sinh"],
+    ["Sữa rửa mặt","Vệ sinh"],
     ["Xà bông rửa tay","Vệ sinh"],
-    ["Nước giặt / nước xả vải","Vệ sinh"],
+    ["Nước giặt","Vệ sinh"],
+    ["Nước xả vải","Vệ sinh"],
+    ["Nước tẩy trang","Vệ sinh"],
+    ["Bông tẩy trang","Vệ sinh"],
+    ["Phấn phủ","Vệ sinh"],
+    ["Lược","Vệ sinh"],
+    ["Gương nhỏ","Vệ sinh"],
+    ["Tăm chỉ nha khoa","Vệ sinh"],
+    ["Bấm móng tay","Vệ sinh"],
+    ["Chai xịt giày","Vệ sinh"],
+    ["Xịt khử mùi chân","Vệ sinh"],
 
     ["Softfel xịt muỗi","Sức khỏe"],
-    ["Kem chống nắng","Sức khỏe"],
+    ["Kem chống nắng cho mặt","Sức khỏe"],
+    ["Kem chống nắng body","Sức khỏe"],
     ["Băng keo cá nhân","Sức khỏe"],
+    ["Salonpas","Sức khỏe"],
     ["Thuốc cá nhân đang dùng","Sức khỏe"],
     ["Dầu gió","Sức khỏe"],
     ["Thuốc giảm đau / hạ sốt","Sức khỏe"],
@@ -101,9 +122,13 @@
     ["Củ sạc","Điện tử"],
     ["Sạc dự phòng","Điện tử"],
     ["Quạt cầm tay","Điện tử"],
+    ["Máy sấy tóc","Điện tử"],
+    ["Tai nghe","Điện tử"],
+    ["Đăng ký gói 4G","Điện tử"],
 
     ["Bình nước 1–1.5L","Tiện ích"],
-    ["Móc treo quần áo (5 cái)","Tiện ích"],
+    ["Đầu lọc nước","Tiện ích"],
+    ["Móc treo quần áo (5–10 cái)","Tiện ích"],
     ["Dây phơi đồ","Tiện ích"],
     ["Kẹp quần áo","Tiện ích"],
     ["Ổ khóa nhỏ","Tiện ích"],
@@ -111,20 +136,27 @@
     ["Khăn giấy khô","Tiện ích"],
     ["Khăn ướt","Tiện ích"],
     ["Áo mưa mỏng","Tiện ích"],
-    ["Dù gấp gọn","Tiện ích"],
+    ["Dù che nắng mưa","Tiện ích"],
+    ["Bút viết","Tiện ích"],
+    ["Sổ tay","Tiện ích"],
+    ["Kim chỉ","Tiện ích"],
+    ["Chăn mỏng","Tiện ích"],
+    ["Gối mỏng","Tiện ích"],
 
     ["Bánh / đồ ăn nhẹ","Đồ ăn"]
   ];
 
-  const KEY="qs_checklist_minimal_v3";
-  const OLD_KEY="qs_checklist_minimal_v2";
+  const KEY="qs_checklist_minimal_v4";
+  const OLD_KEYS=["qs_checklist_minimal_v3","qs_checklist_minimal_v2"];
   const $=s=>document.querySelector(s);
   let active=CATEGORIES[0];
   const uid=()=>crypto.randomUUID?.() || Date.now()+"-"+Math.random();
   const defaults=()=>DEFAULT.map(x=>({id:uid(),title:x[0],category:x[1],checked:false}));
   const load=()=>{
     try {
-      const saved=JSON.parse(localStorage.getItem(KEY) || localStorage.getItem(OLD_KEY) || "null");
+      let raw=localStorage.getItem(KEY);
+      if(!raw){ for(const key of OLD_KEYS){ raw=localStorage.getItem(key); if(raw) break; } }
+      const saved=JSON.parse(raw || "null");
       if(!saved) return defaults();
       const byTitle=new Map(saved.map(x=>[x.title,x]));
       return DEFAULT.map(x=>{
